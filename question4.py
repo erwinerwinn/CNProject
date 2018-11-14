@@ -10,37 +10,37 @@ raNo = 0
 
 messageSize=''
 
-keyWords = ['dnssec', 'secdns']
+keyWords = ['RRSIG', 'DNSKEY']
 
-with open('/Users/erwinerwinn/Desktop/MSSD/Computer Networks/CNProjects/top-120-sites copy.csv') as csvfile:
+with open('/Users/kseet001/Desktop/MSSD/Year 1/Computer Networks/CN-Projects/T4/top-1500-sites copy.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         site = row['Site']
         # dig sutd.edu.sg +short +dnssec
         # dig DNSKEY cloudflare.com +short
         # dig +multi +noall +answer dnskey google.com  +short
-        p = subprocess.Popen(["dig", site, "+dnssec"], stdout=subprocess.PIPE)
+        p = subprocess.Popen(["dig", site, "ANY"], stdout=subprocess.PIPE)
         resultString = p.communicate()[0].decode('UTF-8')
 
         # Check for DNSSEC indicators
-        # if any(re.findall('|'.join(keyWords), resultString)):
-        #     print(site + " Contains DNSSEC")
-        #     contain += 1
-        # else:
-        #     print(site + " does not contain DNSSEC")
-        #     notContain += 1
+        if any(re.findall('|'.join(keyWords), resultString)):
+            print(site + " Contains DNSSEC")
+            contain += 1
+        else:
+            print(site + " does not contain DNSSEC")
+            notContain += 1
 
         # search for RA flag
-        # regex for msg size:  [\q\d\s]*MSG SIZE  rcvd:[0-9 ]+
+        #regex for msg size:  [\q\d\s]*MSG SIZE  rcvd:[0-9 ]+
 
         flagCapture = re.search('[\w\d\s]*flags:[a-z ]+;', resultString).group(0)
         print(flagCapture)
         if 'ra' in flagCapture:
             print(site+" is recursively available")
             raYes += 1
-        if 'ad' in flagCapture:
-            print(site + " is DNSSec")
-            contain += 1
+        #if 'ad' in flagCapture:
+        #    print(site + " is DNSSec")
+        #    contain += 1
         # else:
         #     print(site + " is not recursively available")
         #     raNo += 1
