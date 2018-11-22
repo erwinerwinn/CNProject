@@ -10,33 +10,31 @@ raNo = 0
 
 messageSize=''
 
-keyWords = ['RRSIG', 'DNSKEY']
+keyWords = ['RRSIG','DNSKEY','NSEC','DS']
 
-with open('/Users/kseet001/Desktop/MSSD/Year 1/Computer Networks/CN-Projects/T4/top-1500-sites copy.csv') as csvfile:
+with open('/Users/erwinerwinn/Desktop/MSSD/Computer Networks/CNProjects/T4/top-1500-sites copy.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         site = row['Site']
-        # dig sutd.edu.sg +short +dnssec
-        # dig DNSKEY cloudflare.com +short
-        # dig +multi +noall +answer dnskey google.com  +short
+
         p = subprocess.Popen(["dig", site, "ANY"], stdout=subprocess.PIPE)
         resultString = p.communicate()[0].decode('UTF-8')
 
         # Check for DNSSEC indicators
         if any(re.findall('|'.join(keyWords), resultString)):
-            print(site + " Contains DNSSEC")
+            print(site + " Contains DNSSEC") # print what type of key
             contain += 1
         else:
-            print(site + " does not contain DNSSEC")
+            #print(site + " does not contain DNSSEC")
             notContain += 1
 
         # search for RA flag
         #regex for msg size:  [\q\d\s]*MSG SIZE  rcvd:[0-9 ]+
 
         flagCapture = re.search('[\w\d\s]*flags:[a-z ]+;', resultString).group(0)
-        print(flagCapture)
+        #print(flagCapture)
         if 'ra' in flagCapture:
-            print(site+" is recursively available")
+            #print(site+" is recursively available")
             raYes += 1
         #if 'ad' in flagCapture:
         #    print(site + " is DNSSec")
@@ -48,8 +46,8 @@ with open('/Users/kseet001/Desktop/MSSD/Year 1/Computer Networks/CN-Projects/T4/
         # Message Size
         message = re.search('[\w\d\s]*MSG SIZE  rcvd:[0-9 ]+', resultString).group(0)
         messageSize = int(re.search('[\d][0-9 ]',message).group(0))
-        print("msg size for {} is {}".format(site, messageSize))
-        print()
+        #print("msg size for {} is {}".format(site, messageSize))
+        #print()
 
 print("============== Runtime Report ======================")
 print("Contain DNSSec: ", +contain)
