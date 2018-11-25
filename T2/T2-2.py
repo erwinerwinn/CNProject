@@ -4,7 +4,7 @@ import re
 topAF = [5]
 afDict = {}
 
-with open('/Users/erwinerwinn/Desktop/MSSD/Computer Networks/CNProjects/T2/T2-Analysis.txt', 'r') as f:
+with open('/Users/kseet001/PycharmProjects/CNProject/T2/output.txt', 'r') as f:
     for line in f:
         fields = line.split()
         port = re.search('(?<=:).*$', fields[2]).group(0)
