@@ -13,7 +13,7 @@ with open('TLD.dictionary', 'r') as f:
     for line in f:
         success = 0     # for counting the number of successful queries
         fields = line.split(" ")
-        for i in range(10):
+        for i in range(500):
             print(i+1)
             output_file.write("Packet %s" %(i+1))
             auth_NS_IP = "@" + fields[1].rstrip()
