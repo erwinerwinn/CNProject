@@ -8,11 +8,9 @@ time = datetime.datetime.now()
 timestamp = time.strftime("%Y-%m-%d-%H:%M")
 output_filename = "output." + timestamp +".txt"
 output_file = open(output_filename, "w")
-processes = []
 
 with open('TLD.dictionary', 'r') as f:
     for line in f:
-        success = 0     # for counting the number of successful queries
         fields = line.split(" ")
         for i in range(500):
             print(i+1)
@@ -29,7 +27,6 @@ with open('TLD.dictionary', 'r') as f:
             pass
         #for p in processes:
         #    p.kill()
-
 
 # run The above with wireshark opened
 
